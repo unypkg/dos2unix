@@ -2,6 +2,9 @@
 # shellcheck disable=SC2034,SC1091,SC2086,SC2016
 
 set -xv
+
+apt install -y po4a dos2unix zip
+
 ######################################################################################################################
 ### Setup Build System and GitHub
 
@@ -48,6 +51,12 @@ latest_commit_id="$(echo "$latest_head" | cut --fields=1)"
 check_for_repo_and_create
 git_clone_source_repo
 
+cd dos2unix || exit
+make dist
+cd /uny/sources || exit
+rm -rvf d2u752 d2u752.zip dos2unix dos2unix-*.tar.gz
+mv -v dos2unix-* dos2unix
+
 archiving_source
 
 ######################################################################################################################
@@ -68,6 +77,8 @@ get_include_paths_temp
 ### Start of individual build script
 
 unset LD_RUN_PATH
+
+cat Makefile | sed "s|prefix.*=.*/usr|prefix=|g" -i Makefile
 
 make -j"$(nproc)"
 make -j"$(nproc)" check
