@@ -3,13 +3,12 @@
 
 set -xv
 
-apt install -y po4a dos2unix zip
-
 ######################################################################################################################
 ### Setup Build System and GitHub
 
+apt install -y po4a dos2unix zip
+
 wget -qO- uny.nu/pkg | bash -s buildsys
-mkdir /uny/tmp
 
 ### Getting Variables from files
 UNY_AUTO_PAT="$(cat UNY_AUTO_PAT)"
@@ -17,15 +16,13 @@ export UNY_AUTO_PAT
 GH_TOKEN="$(cat GH_TOKEN)"
 export GH_TOKEN
 
-source /uny/uny/build/github_conf
-source /uny/uny/build/download_functions
 source /uny/git/unypkg/fn
+uny_auto_github_conf
 
 ######################################################################################################################
 ### Timestamp & Download
 
-uny_build_date_seconds_now="$(date +%s)"
-uny_build_date_now="$(date -d @"$uny_build_date_seconds_now" +"%Y-%m-%dT%H.%M.%SZ")"
+uny_build_date
 
 mkdir -pv /uny/sources
 cd /uny/sources || exit
@@ -61,7 +58,7 @@ archiving_source
 # unyc - run commands in uny's chroot environment
 unyc <<"UNYEOF"
 set -xv
-source /uny/build/functions
+source /uny/git/unypkg/fn
 
 pkgname="dos2unix"
 
