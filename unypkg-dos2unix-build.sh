@@ -41,7 +41,6 @@ version_details
 # Release package no matter what:
 echo "newer" >release-"$pkgname"
 
-check_for_repo_and_create
 git_clone_source_repo
 
 cd dos2unix || exit
